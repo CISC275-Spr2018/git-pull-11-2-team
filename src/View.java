@@ -18,10 +18,10 @@ public class View extends JPanel{
     private final static int frameHeight = 300;
     private final static int imgWidth = 165;
     private final static int imgHeight = 165;
-    final int frameCount = 10;
+    final int frameCount = 20; //switched this to 20 because 10 and 4 both divide into 20 evenly
     int picNum = 0;
     BufferedImage[][] pics;
-    final int bmCount = 8;
+    final int bmCount = 12; //changed this to 9
     JFrame frame = new JFrame();
     private static int xloc = 0;
     private static int yLoc = 0;
@@ -33,22 +33,30 @@ public class View extends JPanel{
     	
     	
     	BufferedImage[] img = new BufferedImage[bmCount];
-    	img[0] = createImage("orc_forward_", Direction.NORTH);
-    	img[1] = createImage("orc_forward_", Direction.NORTHEAST);
-    	img[2] = createImage("orc_forward_", Direction.EAST);
-    	img[3] = createImage("orc_forward_", Direction.SOUTHEAST);
-    	img[4] = createImage("orc_forward_", Direction.SOUTH);
-    	img[5] = createImage("orc_forward_", Direction.SOUTHWEST);
-    	img[6] = createImage("orc_forward_", Direction.WEST);
-    	img[7] = createImage("orc_forward_", Direction.NORTHWEST);
+    	img[0] = createImage("orc_forward_north");
+    	img[1] = createImage("orc_forward_northeast");
+    	img[2] = createImage("orc_forward_east");
+    	img[3] = createImage("orc_forward_southeast");
+    	img[4] = createImage("orc_forward_south");
+    	img[5] = createImage("orc_forward_southwest");
+    	img[6] = createImage("orc_forward_west");
+    	img[7] = createImage("orc_forward_northwest");
+    	img[8] = createImage("orc_idle_ewns");
     	
     	pics = new BufferedImage[bmCount][frameCount];
-    	for(int j = 0; j < bmCount; j++) {
+    	for(int j = 0; j < bmCount - 4; j++) { //this would take care of the first 8 pics but not the rest that is why i subtracted
     		for(int i = 0; i < frameCount; i++) {
-    			pics[j][i] = img[j].getSubimage(imgWidth*i, 0, imgWidth, imgHeight);
+    			pics[j][i] = img[j].getSubimage(imgWidth*(i % 10), 0, imgWidth, imgHeight);
     	
     	// TODO: Change this constructor so that at least eight orc animation pngs are loaded
     		}  
+    	}
+    	
+    	for(int c = 0; c < frameCount; c++) {
+    		pics[8][c] = img[8].getSubimage(imgWidth*(c % 4), 0, imgWidth, imgHeight);
+    		pics[9][c] = img[8].getSubimage(imgWidth*(c % 4), imgHeight, imgWidth, imgHeight);
+    		pics[10][c] = img[8].getSubimage(imgWidth*(c % 4), imgHeight * 2, imgWidth, imgHeight);
+    		pics[11][c] = img[8].getSubimage(imgWidth*(c % 4), imgHeight * 3, imgWidth, imgHeight);
     	}
     	JButton b = new JButton("stop/start");
     	b.addActionListener( new ActionListener()
@@ -121,11 +129,11 @@ public class View extends JPanel{
 		}
     }
     
-    private BufferedImage createImage(String imgName, Direction dir){
+    //changed this because the current setup did not allow other images to be created
+    private BufferedImage createImage(String directory){
     	BufferedImage bufferedImage;
-    	System.out.println(imgName + dir.getName());
     	try {
-    		bufferedImage = ImageIO.read(new File("images/orc/" + imgName + dir.getName() + ".png"));
+    		bufferedImage = ImageIO.read(new File("images/orc/" + directory + ".png"));
     		return bufferedImage;
     	} catch (IOException e) {
     		e.printStackTrace();

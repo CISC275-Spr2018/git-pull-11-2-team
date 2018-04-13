@@ -22,15 +22,10 @@ public class Controller implements KeyListener {
 
 	private void step() {
 		// increment the x and y coordinates, alter direction if necessary
-		if(view.startW == true)
-    	{
-			model.updateLocationAndDirection();
-			// update the view
+		if (view.startW == true) {
+			model.updateModel();
 			view.update(model.getX(), model.getY(), model.getDirect());
-    	}
-		//model.updateLocationAndDirection();
-		// update the view
-		//view.update(model.getX(), model.getY(), model.getDirect());
+		}
 	}
 
 	// run the simulation
@@ -49,22 +44,31 @@ public class Controller implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
-		
-		if(key == KeyEvent.VK_UP) {
-			model.setDirection(5, Direction.NORTH);
-		}else if(key == KeyEvent.VK_DOWN) {
-			model.setDirection(6, Direction.SOUTH);
-		}else if(key == KeyEvent.VK_RIGHT) {
-			model.setDirection(7, Direction.EAST);
-		}else if(key == KeyEvent.VK_LEFT) {
-			model.setDirection(8, Direction.WEST);
-		}//else model.setDirection(0);
+
+		if (key == KeyEvent.VK_UP) {
+			model.setAttributes(1, Direction.NORTH, 0, 10);
+		} else if (key == KeyEvent.VK_DOWN) {
+			model.setAttributes(2, Direction.SOUTH, 0, 10);
+		} else if (key == KeyEvent.VK_RIGHT) {
+			model.setAttributes(3, Direction.EAST, 10, 0);
+		} else if (key == KeyEvent.VK_LEFT) {
+			model.setAttributes(4, Direction.WEST, 10, 0);
+		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
+		int key = e.getKeyCode();
 
+		if (key == KeyEvent.VK_UP) {
+			model.setAttributes(1, Direction.FACINGNORTH, 0, 0);
+		} else if (key == KeyEvent.VK_DOWN) {
+			model.setAttributes(2, Direction.FACINGSOUTH, 0, 0);
+		} else if (key == KeyEvent.VK_RIGHT) {
+			model.setAttributes(3, Direction.FACINGEAST, 0, 0);
+		} else if (key == KeyEvent.VK_LEFT) {
+			model.setAttributes(4, Direction.FACINGWEST, 0, 0);
+		}
 	}
 
 	@Override

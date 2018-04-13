@@ -9,4 +9,8 @@ Matthew Gargano:
 	incorporated directional enums into the original MVC Orc Code 
 	and assisted with the Start/Stop button
 Kalloyan Stoyanov:
+<<<<<<< HEAD
 	Added Keylistener to controller class to allow user to choose the Orc's direction with the 	keyboard arrow keys
+=======
+	Added Keylistener to controller class to allow user to choose the Orc's direction with the 	keyboard arrow keys
+>>>>>>> kal
