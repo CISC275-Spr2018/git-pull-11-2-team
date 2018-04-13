@@ -29,6 +29,7 @@ public class View extends JPanel{
 	private static final Color BACKGROUND_COLOR = Color.GRAY;
 	static boolean startW;
     static int bCount;
+    private Animation animation = Animation.WALKING;
     public View() {
     	
     	
@@ -96,7 +97,7 @@ public class View extends JPanel{
     public void paint(Graphics g) {
 		super.paint(g);
     	picNum = (picNum + 1) % frameCount;
-    	g.drawImage(pics[curDir.ordinal()][picNum], xloc, yLoc, BACKGROUND_COLOR, this);
+    	g.drawImage(this.animation.getCurrentFrameForDirection(this.curDir), xloc, yLoc, BACKGROUND_COLOR, this);
     }
     
     public int getHeight() {
