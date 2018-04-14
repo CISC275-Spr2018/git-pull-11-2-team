@@ -26,14 +26,20 @@ public abstract class Animation {
 
 	//---------- Convenience methods for inside subclasses:
 
-	private int frame = 0;
+	private int frameNum = 0;
+
+	// int getFrameNum()
+	// Return the frame number. Every time it is called, its return increases by one.
+	protected int getFrameNum() {
+		return frameNum++;
+	}
 
 	// BufferedImage sequentialFrames(BufferedImage[] imgs)
 	// When called the first time, will return imgs[0].
 	// Next time, imgs[1]. Et cetera. 
 	// When it reaches the end, it will jump back to the beginning.
 	protected BufferedImage sequentialFrames(BufferedImage[] imgs) {
-		return imgs[(this.frame++) % imgs.length];
+		return imgs[this.getFrameNum() % imgs.length];
 	}
 
 	// loadImg(String name): Basically a convenience wrapper around ImageIO.read().
@@ -77,7 +83,16 @@ public abstract class Animation {
 		}
 
 		public BufferedImage getCurrentFrameForDirection(Direction d) {
-			return this.sequentialFrames(frames);
+			int start;
+			switch(d) {
+				case EAST: start = 0; break;
+				case WEST: start = 4; break;
+				case NORTH: start = 8; break;
+				case SOUTH: start = 12; break;
+				default:
+					throw new RuntimeException("Idle animation is not aware of the Direction "+d);
+			}
+			return frames[start + (this.getFrameNum() % 4)];
 		}
 	}
 
