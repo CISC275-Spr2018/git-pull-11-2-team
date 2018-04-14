@@ -64,6 +64,10 @@ public class Controller implements KeyListener {
 			break;
 		case KeyEvent.VK_J:
 			view.setAnimation(Animation.JUMP);
+			break;
+		case KeyEvent.VK_F:
+			view.setAnimation(Animation.FIRE);
+			break;
 		}
 	}
 
@@ -77,6 +81,7 @@ public class Controller implements KeyListener {
 		case KeyEvent.VK_RIGHT:
 		case KeyEvent.VK_LEFT:
 		case KeyEvent.VK_J:
+		case KeyEvent.VK_F:
 			model.stop();
 			view.setAnimation(Animation.IDLE);
 		}

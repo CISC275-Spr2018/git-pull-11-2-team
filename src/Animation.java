@@ -12,7 +12,7 @@ public abstract class Animation {
 	public static final Animation WALKING = new WalkingAnimation();
 	public static final Animation IDLE = new IdleAnimation();
 	public static final Animation JUMP = new JumpingAnimation();
-
+	public static final Animation FIRE = new FiringAnimation();
 	// All subclasses must implement these methods.
 	protected abstract void load(); // Load everything necessary from disk
 	public abstract BufferedImage getCurrentFrameForDirection(Direction d); // Return the appropriate BufferedImage for this frame
@@ -24,6 +24,7 @@ public abstract class Animation {
 		WALKING.load();
 		IDLE.load();
 		JUMP.load();
+		FIRE.load();
 	}
 
 	//---------- Convenience methods for inside subclasses:
@@ -146,6 +147,25 @@ public abstract class Animation {
 		@Override
 		protected int getXFramesForDir(Direction dir) {
 			return 8;
+			
+			
+		}
+		
+		@Override
+		protected int getYFramesForDir(Direction dir) {
+			return 1;
+		}
+	}
+	
+	private static class FiringAnimation extends BasicAnimation{
+		@Override
+		protected String getNameForDir(Direction dir) {
+			return "orc_fire_" + dir.getName();
+		}
+		
+		@Override
+		protected int getXFramesForDir(Direction dir) {
+			return 4;
 			
 			
 		}
