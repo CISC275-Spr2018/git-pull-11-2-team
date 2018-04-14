@@ -55,14 +55,17 @@ public abstract class Animation {
 	//---------- Subclasses themselves
 
 	private static abstract class BasicAnimation extends Animation {
-		private BufferedImage[] east;
+		private BufferedImage[][] directions;
 		int fnum;
 
 		protected void load() {
-			east = splitTiled(
-				loadImg(this.getNameForDir(Direction.EAST)),
-				this.getXFramesForDir(Direction.EAST),
-				this.getYFramesForDir(Direction.EAST));
+			directions = new BufferedImage[Direction.LENGTH][];
+			for(Direction d : Direction.values()) {
+				directions[d.ordinal()] = splitTiled(
+					loadImg(this.getNameForDir(d)),
+					this.getXFramesForDir(d),
+					this.getYFramesForDir(d));
+			}
 		}
 		
 		protected abstract String getNameForDir(Direction dir);
@@ -70,7 +73,8 @@ public abstract class Animation {
 		protected abstract int getYFramesForDir(Direction dir);
 
 		public BufferedImage getCurrentFrameForDirection(Direction d) {
-			return east[fnum++ % east.length];
+			BufferedImage[] anim = directions[d.ordinal()];
+			return anim[fnum++ % anim.length];
 		}
 	}
 

@@ -6,6 +6,8 @@ public enum Direction {
 	EAST("east"),
 	SOUTH("south"),
 	WEST("west");
+
+	public static final int LENGTH = Direction.values().length;
 	
 	private String name = null;
 	
