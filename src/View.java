@@ -25,7 +25,7 @@ public class View extends JPanel{
     JFrame frame = new JFrame();
     private static int xloc = 0;
     private static int yLoc = 0;
-    private static Direction curDir = Direction.SOUTHEAST;
+    private static Direction curDir = Direction.EAST;
 	private static final Color BACKGROUND_COLOR = Color.GRAY;
 	static boolean startW;
     static int bCount;

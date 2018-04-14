@@ -60,15 +60,7 @@ public class Controller implements KeyListener {
 	public void keyReleased(KeyEvent e) {
 		int key = e.getKeyCode();
 
-		if (key == KeyEvent.VK_UP) {
-			model.setAttributes(1, Direction.FACINGNORTH, 0, 0);
-		} else if (key == KeyEvent.VK_DOWN) {
-			model.setAttributes(2, Direction.FACINGSOUTH, 0, 0);
-		} else if (key == KeyEvent.VK_RIGHT) {
-			model.setAttributes(3, Direction.FACINGEAST, 0, 0);
-		} else if (key == KeyEvent.VK_LEFT) {
-			model.setAttributes(4, Direction.FACINGWEST, 0, 0);
-		}
+		// TODO: stop
 	}
 
 	@Override

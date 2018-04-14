@@ -23,7 +23,7 @@ public class Model
 	int xIncr = 0;
 	int yIncr = 0;
 
-	Direction curDir = Direction.FACINGEAST;
+	Direction curDir = Direction.EAST;
 	
 	int dir = 0;
 
