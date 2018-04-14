@@ -10,13 +10,14 @@ import javax.imageio.ImageIO;
 public abstract class Animation {
 	public static final Animation WALKING = new Animation() {
 		private BufferedImage[] east;
+		int fnum;
 
 		protected void load() {
 			east = splitTiled(loadImg("orc_forward_east"), 10, 1);
 		}
 
 		public BufferedImage getCurrentFrameForDirection(Direction d) {
-			return east[0];
+			return east[fnum++ % east.length];
 		}
 	};
 
