@@ -8,18 +8,7 @@ import javax.imageio.ImageIO;
 // The only public method of an Animation is getCurrentFrameForDirection(d)
 
 public abstract class Animation {
-	public static final Animation WALKING = new Animation() {
-		private BufferedImage[] east;
-		int fnum;
-
-		protected void load() {
-			east = splitTiled(loadImg("orc_forward_east"), 10, 1);
-		}
-
-		public BufferedImage getCurrentFrameForDirection(Direction d) {
-			return east[fnum++ % east.length];
-		}
-	};
+	public static final Animation WALKING = new WalkingAnimation();
 
 	// All subclasses must implement these methods.
 	protected abstract void load();
@@ -53,4 +42,17 @@ public abstract class Animation {
 					x*frameW, y*frameH, frameW, frameH);
 		return result;
 	}
+
+	private static class WalkingAnimation extends Animation {
+		private BufferedImage[] east;
+		int fnum;
+
+		protected void load() {
+			east = splitTiled(loadImg("orc_forward_east"), 10, 1);
+		}
+
+		public BufferedImage getCurrentFrameForDirection(Direction d) {
+			return east[fnum++ % east.length];
+		}
+	};
 }
