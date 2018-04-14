@@ -11,6 +11,7 @@ public abstract class Animation {
 	// public static final Animations - the most important part of this class.
 	public static final Animation WALKING = new WalkingAnimation();
 	public static final Animation IDLE = new IdleAnimation();
+	public static final Animation JUMP = new JumpingAnimation();
 
 	// All subclasses must implement these methods.
 	protected abstract void load(); // Load everything necessary from disk
@@ -22,6 +23,7 @@ public abstract class Animation {
 	public static void preload() {
 		WALKING.load();
 		IDLE.load();
+		JUMP.load();
 	}
 
 	//---------- Convenience methods for inside subclasses:
@@ -129,6 +131,25 @@ public abstract class Animation {
 			return 10;
 		}
 
+		@Override
+		protected int getYFramesForDir(Direction dir) {
+			return 1;
+		}
+	}
+	
+	private static class JumpingAnimation extends BasicAnimation{
+		@Override
+		protected String getNameForDir(Direction dir) {
+			return "orc_jump_" + dir.getName();
+		}
+		
+		@Override
+		protected int getXFramesForDir(Direction dir) {
+			return 8;
+			
+			
+		}
+		
 		@Override
 		protected int getYFramesForDir(Direction dir) {
 			return 1;

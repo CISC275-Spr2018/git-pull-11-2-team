@@ -44,19 +44,26 @@ public class Controller implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
-
-		if (key == KeyEvent.VK_UP) {
+		
+		switch(key) {
+		case KeyEvent.VK_UP:
 			model.setAttributes(1, Direction.NORTH, 0, 10);
 			view.setAnimation(Animation.WALKING);
-		} else if (key == KeyEvent.VK_DOWN) {
+			break;
+		case KeyEvent.VK_DOWN:
 			model.setAttributes(2, Direction.SOUTH, 0, 10);
 			view.setAnimation(Animation.WALKING);
-		} else if (key == KeyEvent.VK_RIGHT) {
+			break;
+		case KeyEvent.VK_RIGHT:
 			model.setAttributes(3, Direction.EAST, 10, 0);
 			view.setAnimation(Animation.WALKING);
-		} else if (key == KeyEvent.VK_LEFT) {
+			break;
+		case KeyEvent.VK_LEFT:
 			model.setAttributes(4, Direction.WEST, 10, 0);
 			view.setAnimation(Animation.WALKING);
+			break;
+		case KeyEvent.VK_J:
+			view.setAnimation(Animation.JUMP);
 		}
 	}
 
@@ -69,6 +76,7 @@ public class Controller implements KeyListener {
 		case KeyEvent.VK_DOWN:
 		case KeyEvent.VK_RIGHT:
 		case KeyEvent.VK_LEFT:
+		case KeyEvent.VK_J:
 			model.stop();
 			view.setAnimation(Animation.IDLE);
 		}
