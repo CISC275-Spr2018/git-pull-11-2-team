@@ -95,13 +95,6 @@ public class View extends JPanel{
     	yLoc = y;
     	curDir = dir;
     	frame.repaint();
-    	
-    	
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
     }
 }
     

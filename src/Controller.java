@@ -12,7 +12,7 @@ public class Controller implements KeyListener {
 	private View view;
 	private Timer stepTimer;
 
-	private static final int DRAW_DELAY = 5;
+	private static final int DRAW_DELAY = 100;
 
 	private final Action stepAction = new AbstractAction() {
 		public void actionPerformed(ActionEvent e) {
