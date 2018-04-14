@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 public abstract class Animation {
 	// public static final Animations - the most important part of this class.
 	public static final Animation WALKING = new WalkingAnimation();
+	public static final Animation IDLE = new IdleAnimation();
 
 	// All subclasses must implement these methods.
 	protected abstract void load(); // Load everything necessary from disk
@@ -20,6 +21,7 @@ public abstract class Animation {
 	// The only other public thing - a public static void preload() method
 	public static void preload() {
 		WALKING.load();
+		IDLE.load();
 	}
 
 	//---------- Convenience methods for inside subclasses:
@@ -63,6 +65,21 @@ public abstract class Animation {
 	}
 
 	//---------- Subclasses themselves
+
+	private static class IdleAnimation extends Animation {
+		private BufferedImage[] frames;
+
+		@Override
+		protected void load() {
+			frames = this.splitTiled(
+				this.loadImg("orc_idle_ewns"),
+				4, 4);
+		}
+
+		public BufferedImage getCurrentFrameForDirection(Direction d) {
+			return this.sequentialFrames(frames);
+		}
+	}
 
 	private static abstract class BasicAnimation extends Animation {
 		private BufferedImage[][] directions;

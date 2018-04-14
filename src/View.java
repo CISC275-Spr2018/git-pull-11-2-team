@@ -29,7 +29,7 @@ public class View extends JPanel{
 	private static final Color BACKGROUND_COLOR = Color.GRAY;
 	static boolean startW;
     static int bCount;
-    private Animation animation = Animation.WALKING;
+    private Animation animation = Animation.IDLE;
     public View() {
     	// Preload animations
 		Animation.preload();
