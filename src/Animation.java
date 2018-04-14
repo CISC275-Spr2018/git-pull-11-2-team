@@ -8,16 +8,19 @@ import javax.imageio.ImageIO;
 // The only public method of an Animation is getCurrentFrameForDirection(d)
 
 public abstract class Animation {
+	// public static final Animations - the most important part of this class.
 	public static final Animation WALKING = new WalkingAnimation();
 
 	// All subclasses must implement these methods.
-	protected abstract void load();
-	public abstract BufferedImage getCurrentFrameForDirection(Direction d);
+	protected abstract void load(); // Load everything necessary from disk
+	public abstract BufferedImage getCurrentFrameForDirection(Direction d); // Return the appropriate BufferedImage for this frame
 
-	// Will always load on construction.
-	private Animation() {
-		this.load();
-	} // Prevent instantiation
+	private Animation() {} // Prevent instantiation
+
+	// The only other public thing - a public static void preload() method
+	public static void preload() {
+		WALKING.load();
+	}
 
 	//---------- Convenience methods for inside subclasses:
 
@@ -32,6 +35,12 @@ public abstract class Animation {
 		return null;
 	}
 
+	// splitTiled(BufferedImage source, int xframes, int yframes)
+	// Splits a BufferedImage into multiple BufferedImages using a tiling pattern.
+	// xframes is the number of tiles horizontally across the source image.
+	// yframes is the number of tiles vertically across the source image.
+	// The tiles or ordered in the array left-to-right, top-to-bottom
+	// (like reading a book)
 	protected BufferedImage[] splitTiled(BufferedImage source, int xframes, int yframes) {
 		BufferedImage[] result = new BufferedImage[xframes*yframes];
 		int frameW = source.getWidth()/xframes;
@@ -43,16 +52,42 @@ public abstract class Animation {
 		return result;
 	}
 
-	private static class WalkingAnimation extends Animation {
+	//---------- Subclasses themselves
+
+	private static abstract class BasicAnimation extends Animation {
 		private BufferedImage[] east;
 		int fnum;
 
 		protected void load() {
-			east = splitTiled(loadImg("orc_forward_east"), 10, 1);
+			east = splitTiled(
+				loadImg(this.getNameForDir(Direction.EAST)),
+				this.getXFramesForDir(Direction.EAST),
+				this.getYFramesForDir(Direction.EAST));
 		}
+		
+		protected abstract String getNameForDir(Direction dir);
+		protected abstract int getXFramesForDir(Direction dir);
+		protected abstract int getYFramesForDir(Direction dir);
 
 		public BufferedImage getCurrentFrameForDirection(Direction d) {
 			return east[fnum++ % east.length];
 		}
-	};
+	}
+
+	private static class WalkingAnimation extends BasicAnimation {
+		@Override
+		protected String getNameForDir(Direction dir) {
+			return "orc_forward_"+dir.getName();
+		}
+
+		@Override
+		protected int getXFramesForDir(Direction dir) {
+			return 10;
+		}
+
+		@Override
+		protected int getYFramesForDir(Direction dir) {
+			return 1;
+		}
+	}
 }

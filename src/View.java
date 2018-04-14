@@ -31,7 +31,8 @@ public class View extends JPanel{
     static int bCount;
     private Animation animation = Animation.WALKING;
     public View() {
-    	
+    	// Preload animations
+		Animation.preload();
     	
     	BufferedImage[] img = new BufferedImage[bmCount];
     	img[0] = createImage("orc_forward_north");
