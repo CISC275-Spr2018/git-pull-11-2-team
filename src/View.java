@@ -90,6 +90,10 @@ public class View extends JPanel{
     	frame.setSize(frameWidth, frameHeight);
     	frame.setVisible(true);
     }
+
+	public void setAnimation(Animation animation) {
+		this.animation = animation;
+	}
     
     public void setKeyListener(KeyListener listener) {
     	frame.addKeyListener(listener);

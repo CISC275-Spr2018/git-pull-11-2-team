@@ -100,6 +100,11 @@ public class Model
 		this.yIncr = yIncr;
 	}
 
+	public void stop() {
+		this.xIncr = 0;
+		this.yIncr = 0;
+	}
+
 	public int getX()
 	{
 		return xLoc;
