@@ -24,6 +24,16 @@ public abstract class Animation {
 
 	//---------- Convenience methods for inside subclasses:
 
+	private int frame = 0;
+
+	// BufferedImage sequentialFrames(BufferedImage[] imgs)
+	// When called the first time, will return imgs[0].
+	// Next time, imgs[1]. Et cetera. 
+	// When it reaches the end, it will jump back to the beginning.
+	protected BufferedImage sequentialFrames(BufferedImage[] imgs) {
+		return imgs[(this.frame++) % imgs.length];
+	}
+
 	// loadImg(String name): Basically a convenience wrapper around ImageIO.read().
 	protected BufferedImage loadImg(String name) {
 		try {
@@ -56,7 +66,6 @@ public abstract class Animation {
 
 	private static abstract class BasicAnimation extends Animation {
 		private BufferedImage[][] directions;
-		int fnum;
 
 		protected void load() {
 			directions = new BufferedImage[Direction.LENGTH][];
@@ -73,8 +82,7 @@ public abstract class Animation {
 		protected abstract int getYFramesForDir(Direction dir);
 
 		public BufferedImage getCurrentFrameForDirection(Direction d) {
-			BufferedImage[] anim = directions[d.ordinal()];
-			return anim[fnum++ % anim.length];
+			return sequentialFrames(directions[d.ordinal()]);
 		}
 	}
 
