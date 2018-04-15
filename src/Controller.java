@@ -44,7 +44,6 @@ public class Controller implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
-		
 		switch(key) {
 		case KeyEvent.VK_UP:
 			model.setAttributes(1, Direction.NORTH, 0, 10);
@@ -66,7 +65,7 @@ public class Controller implements KeyListener {
 			view.setAnimation(Animation.JUMP);
 			break;
 		case KeyEvent.VK_F:
-			view.setAnimation(Animation.FIRE);
+			//view.setAnimation(Animation.FIRE);
 			break;
 		}
 	}
@@ -81,9 +80,14 @@ public class Controller implements KeyListener {
 		case KeyEvent.VK_RIGHT:
 		case KeyEvent.VK_LEFT:
 		case KeyEvent.VK_J:
-		case KeyEvent.VK_F:
 			model.stop();
 			view.setAnimation(Animation.IDLE);
+			break;
+		case KeyEvent.VK_F:
+			System.out.println("Key was released");
+			view.setAnimation(Animation.FIRE);
+			System.out.println("Animation set to fire");
+			break;
 		}
 	}
 

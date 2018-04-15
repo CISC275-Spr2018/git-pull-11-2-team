@@ -20,7 +20,7 @@ public class View extends JPanel{
 	private static final Color BACKGROUND_COLOR = Color.GRAY;
 	static boolean startW;
     static int bCount;
-    private Animation animation = Animation.IDLE;
+    Animation animation = Animation.IDLE;
     public View() {
     	// Preload animations
 		Animation.preload();
@@ -89,6 +89,12 @@ public class View extends JPanel{
     	xloc = x;
     	yLoc = y;
     	curDir = dir;
+    	System.out.println(animation.fireEnd);
+    	if(animation.fireEnd == true) {
+			System.out.println("Setting Animation to Idle");
+			setAnimation(Animation.IDLE);
+			animation.fireEnd = false; 
+    	}
     	frame.repaint();
     }
 }

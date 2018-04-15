@@ -26,10 +26,12 @@ public abstract class Animation {
 		JUMP.load();
 		FIRE.load();
 	}
+	
+	public boolean fireEnd = false;
 
 	//---------- Convenience methods for inside subclasses:
 
-	private int frameNum = 0;
+	protected int frameNum = 0;
 
 	// int getFrameNum()
 	// Return the frame number. Every time it is called, its return increases by one.
@@ -42,6 +44,7 @@ public abstract class Animation {
 	// Next time, imgs[1]. Et cetera. 
 	// When it reaches the end, it will jump back to the beginning.
 	protected BufferedImage sequentialFrames(BufferedImage[] imgs) {
+		System.out.println("SEQFRAME");
 		return imgs[this.getFrameNum() % imgs.length];
 	}
 
@@ -174,5 +177,21 @@ public abstract class Animation {
 		protected int getYFramesForDir(Direction dir) {
 			return 1;
 		}
+		@Override
+		protected BufferedImage sequentialFrames(BufferedImage[] imgs) {
+			System.out.println("We are in the Overriden sequential frames");
+			if(this.getFrameNum()< 4) {
+				System.out.println(this.getFrameNum() %imgs.length);
+			return imgs[this.getFrameNum() % imgs.length];
+			}
+			else {
+				System.out.println("Animation Looped");
+				fireEnd = true;
+				this.frameNum = 0;
+				return imgs[this.getFrameNum() % imgs.length];
+			}
+			}
+		}
+
 	}
-}
+
