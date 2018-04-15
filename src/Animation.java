@@ -13,6 +13,7 @@ public abstract class Animation {
 	public static final Animation IDLE = new IdleAnimation();
 	public static final Animation JUMP = new JumpingAnimation();
 	public static final Animation FIRE = new FiringAnimation();
+	public static Animation PREV;
 	// All subclasses must implement these methods.
 	protected abstract void load(); // Load everything necessary from disk
 	public abstract BufferedImage getCurrentFrameForDirection(Direction d); // Return the appropriate BufferedImage for this frame
@@ -27,8 +28,16 @@ public abstract class Animation {
 		FIRE.load();
 	}
 	
-	public boolean fireEnd = false;
-	public boolean jumpEnd = false;
+	public static boolean fireEnd = false;
+	public static boolean jumpEnd = false;
+	
+	protected void setFireEnd(boolean b) {
+		this.fireEnd = b;
+	}
+	
+	protected boolean getFireEnd() {
+		return this.fireEnd;
+	}
 
 	//---------- Convenience methods for inside subclasses:
 
@@ -45,7 +54,6 @@ public abstract class Animation {
 	// Next time, imgs[1]. Et cetera. 
 	// When it reaches the end, it will jump back to the beginning.
 	protected BufferedImage sequentialFrames(BufferedImage[] imgs) {
-		System.out.println("SEQFRAME");
 		return imgs[this.getFrameNum() % imgs.length];
 	}
 
@@ -143,6 +151,7 @@ public abstract class Animation {
 	}
 	
 	private static class JumpingAnimation extends BasicAnimation{
+		
 		@Override
 		protected String getNameForDir(Direction dir) {
 			return "orc_jump_" + dir.getName();
@@ -162,14 +171,15 @@ public abstract class Animation {
 		
 		@Override
 		protected BufferedImage sequentialFrames(BufferedImage[] imgs) {
-			System.out.println("In overridden jump section");
-			if(this.getFrameNum()< 8) {
-				System.out.println(this.getFrameNum() %imgs.length);
+			System.out.println(this.frameNum);
+			if(this.frameNum< 8) {
+			System.out.println(this.frameNum);
 			return imgs[this.getFrameNum() % imgs.length];
 			}
 			else {
 				System.out.println("Jump Animation Looped");
-				jumpEnd = true;
+				this.setFireEnd(true); 
+				System.out.println("setting jumpEnd to true");
 				this.frameNum = 0;
 				return imgs[this.getFrameNum() % imgs.length];
 			}

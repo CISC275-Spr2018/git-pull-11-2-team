@@ -89,12 +89,11 @@ public class View extends JPanel{
     	xloc = x;
     	yLoc = y;
     	curDir = dir;
-    	System.out.println(animation.fireEnd + "   " + animation.jumpEnd);
-    	if(animation.fireEnd || animation.jumpEnd) {
-			System.out.println("Setting Animation to Idle");
-			setAnimation(Animation.IDLE);
-			animation.fireEnd = false; 
-			animation.jumpEnd = false; 
+    	//System.out.println(animation.jumpEnd);
+    	if(this.animation.getFireEnd()) {
+			//System.out.println("Setting Animation to Idle");
+			setAnimation(Animation.WALKING);
+			this.animation.setFireEnd(false);
     	}
     	frame.repaint();
     }
