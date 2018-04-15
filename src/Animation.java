@@ -1,197 +1,103 @@
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
+import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-// This class contains useful public static final Animations.
-// You cannot create additional Animations in other files; they should all be here.
-// The only public method of an Animation is getCurrentFrameForDirection(d)
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.Timer;
 
-public abstract class Animation {
-	// public static final Animations - the most important part of this class.
-	public static final Animation WALKING = new WalkingAnimation();
-	public static final Animation IDLE = new IdleAnimation();
-	public static final Animation JUMP = new JumpingAnimation();
-	public static final Animation FIRE = new FiringAnimation();
-	// All subclasses must implement these methods.
-	protected abstract void load(); // Load everything necessary from disk
-	public abstract BufferedImage getCurrentFrameForDirection(Direction d); // Return the appropriate BufferedImage for this frame
+public class Controller implements KeyListener {
+	private Model model;
+	private View view;
+	private Timer stepTimer;
 
-	private Animation() {} // Prevent instantiation
+	private static final int DRAW_DELAY = 100;
 
-	// The only other public thing - a public static void preload() method
-	public static void preload() {
-		WALKING.load();
-		IDLE.load();
-		JUMP.load();
-		FIRE.load();
-	}
-	
-	public boolean fireEnd = false;
-
-	//---------- Convenience methods for inside subclasses:
-
-	protected int frameNum = 0;
-
-	// int getFrameNum()
-	// Return the frame number. Every time it is called, its return increases by one.
-	protected int getFrameNum() {
-		return frameNum++;
-	}
-
-	// BufferedImage sequentialFrames(BufferedImage[] imgs)
-	// When called the first time, will return imgs[0].
-	// Next time, imgs[1]. Et cetera. 
-	// When it reaches the end, it will jump back to the beginning.
-	protected BufferedImage sequentialFrames(BufferedImage[] imgs) {
-		System.out.println("SEQFRAME");
-		return imgs[this.getFrameNum() % imgs.length];
-	}
-
-	// loadImg(String name): Basically a convenience wrapper around ImageIO.read().
-	protected BufferedImage loadImg(String name) {
-		try {
-			return ImageIO.read(new File("images/orc/"+name+".png"));
-		} catch(IOException e) {
-			e.printStackTrace();
-			System.exit(1);
+	private final Action stepAction = new AbstractAction() {
+		public void actionPerformed(ActionEvent e) {
+			step();
 		}
-		return null;
-	}
+	};
 
-	// splitTiled(BufferedImage source, int xframes, int yframes)
-	// Splits a BufferedImage into multiple BufferedImages using a tiling pattern.
-	// xframes is the number of tiles horizontally across the source image.
-	// yframes is the number of tiles vertically across the source image.
-	// The tiles or ordered in the array left-to-right, top-to-bottom
-	// (like reading a book)
-	protected BufferedImage[] splitTiled(BufferedImage source, int xframes, int yframes) {
-		BufferedImage[] result = new BufferedImage[xframes*yframes];
-		int frameW = source.getWidth()/xframes;
-		int frameH = source.getHeight()/yframes;
-		for(int x=0; x<xframes; x++)
-			for(int y=0; y<yframes; y++)
-				result[x+xframes*y] = source.getSubimage(
-					x*frameW, y*frameH, frameW, frameH);
-		return result;
-	}
-
-	//---------- Subclasses themselves
-
-	private static class IdleAnimation extends Animation {
-		private BufferedImage[] frames;
-
-		@Override
-		protected void load() {
-			frames = this.splitTiled(
-				this.loadImg("orc_idle_ewns"),
-				4, 4);
+	private void step() {
+		// increment the x and y coordinates, alter direction if necessary
+		if (view.startW == true) {
+			model.updateModel();
+			view.update(model.getX(), model.getY(), model.getDirect());
 		}
+	}
 
-		public BufferedImage getCurrentFrameForDirection(Direction d) {
-			int start;
-			switch(d) {
-				case EAST: start = 0; break;
-				case WEST: start = 4; break;
-				case NORTH: start = 8; break;
-				case SOUTH: start = 12; break;
-				default:
-					throw new RuntimeException("Idle animation is not aware of the Direction "+d);
+	// run the simulation
+	public void start() {
+		view = new View();
+		view.setKeyListener(this);
+		model = new Model(view.getWidth(), view.getHeight(), view.getImageWidth(), view.getImageHeight());
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				stepTimer = new Timer(DRAW_DELAY, stepAction);
+				stepTimer.start();
 			}
-			return frames[start + (this.getFrameNum() % 4)];
+		});
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		int key = e.getKeyCode();
+		switch(key) {
+		case KeyEvent.VK_UP:
+			model.setAttributes(1, Direction.NORTH, 0, 10);
+			view.setAnimation(Animation.WALKING);
+			break;
+		case KeyEvent.VK_DOWN:
+			model.setAttributes(2, Direction.SOUTH, 0, 10);
+			view.setAnimation(Animation.WALKING);
+			break;
+		case KeyEvent.VK_RIGHT:
+			model.setAttributes(3, Direction.EAST, 10, 0);
+			view.setAnimation(Animation.WALKING);
+			break;
+		case KeyEvent.VK_LEFT:
+			model.setAttributes(4, Direction.WEST, 10, 0);
+			view.setAnimation(Animation.WALKING);
+			break;
+		case KeyEvent.VK_J:
+			//view.setAnimation(Animation.JUMP);
+			break;
+		case KeyEvent.VK_F:
+			//view.setAnimation(Animation.FIRE);
+			break;
 		}
 	}
 
-	private static abstract class BasicAnimation extends Animation {
-		private BufferedImage[][] directions;
+	@Override
+	public void keyReleased(KeyEvent e) {
+		int key = e.getKeyCode();
 
-		protected void load() {
-			directions = new BufferedImage[Direction.LENGTH][];
-			for(Direction d : Direction.values()) {
-				directions[d.ordinal()] = splitTiled(
-					loadImg(this.getNameForDir(d)),
-					this.getXFramesForDir(d),
-					this.getYFramesForDir(d));
-			}
-		}
-		
-		protected abstract String getNameForDir(Direction dir);
-		protected abstract int getXFramesForDir(Direction dir);
-		protected abstract int getYFramesForDir(Direction dir);
-
-		public BufferedImage getCurrentFrameForDirection(Direction d) {
-			return sequentialFrames(directions[d.ordinal()]);
+		switch(key) {
+		case KeyEvent.VK_UP:
+		case KeyEvent.VK_DOWN:
+		case KeyEvent.VK_RIGHT:
+		case KeyEvent.VK_LEFT:
+			model.stop();
+			view.setAnimation(Animation.IDLE);
+			break;
+		case KeyEvent.VK_J:
+			System.out.println("Key was released");
+			view.setAnimation(Animation.JUMP);
+			System.out.println("Animation set to Jump");
+			break;
+		case KeyEvent.VK_F:
+			System.out.println("Key was released");
+			view.setAnimation(Animation.FIRE);
+			System.out.println("Animation set to fire");
+			break;
 		}
 	}
 
-	private static class WalkingAnimation extends BasicAnimation {
-		@Override
-		protected String getNameForDir(Direction dir) {
-			return "orc_forward_"+dir.getName();
-		}
-
-		@Override
-		protected int getXFramesForDir(Direction dir) {
-			return 10;
-		}
-
-		@Override
-		protected int getYFramesForDir(Direction dir) {
-			return 1;
-		}
-	}
-	
-	private static class JumpingAnimation extends BasicAnimation{
-		@Override
-		protected String getNameForDir(Direction dir) {
-			return "orc_jump_" + dir.getName();
-		}
-		
-		@Override
-		protected int getXFramesForDir(Direction dir) {
-			return 8;
-			
-			
-		}
-		
-		@Override
-		protected int getYFramesForDir(Direction dir) {
-			return 1;
-		}
-	}
-	
-	private static class FiringAnimation extends BasicAnimation{
-		@Override
-		protected String getNameForDir(Direction dir) {
-			return "orc_fire_" + dir.getName();
-		}
-		
-		@Override
-		protected int getXFramesForDir(Direction dir) {
-			return 4;
-			
-			
-		}
-		
-		@Override
-		protected int getYFramesForDir(Direction dir) {
-			return 1;
-		}
-		@Override
-		protected BufferedImage sequentialFrames(BufferedImage[] imgs) {
-			System.out.println("We are in the Overriden sequential frames");
-			if(this.getFrameNum()< 4) {
-				System.out.println(this.getFrameNum() %imgs.length);
-			return imgs[this.getFrameNum() % imgs.length];
-			}
-			else {
-				System.out.println("Animation Looped");
-				fireEnd = true;
-				this.frameNum = 0;
-				return imgs[this.getFrameNum() % imgs.length];
-			}
-			}
-		}
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
 
 	}
-
+}

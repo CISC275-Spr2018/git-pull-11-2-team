@@ -62,7 +62,7 @@ public class Controller implements KeyListener {
 			view.setAnimation(Animation.WALKING);
 			break;
 		case KeyEvent.VK_J:
-			view.setAnimation(Animation.JUMP);
+			//view.setAnimation(Animation.JUMP);
 			break;
 		case KeyEvent.VK_F:
 			//view.setAnimation(Animation.FIRE);
@@ -79,9 +79,13 @@ public class Controller implements KeyListener {
 		case KeyEvent.VK_DOWN:
 		case KeyEvent.VK_RIGHT:
 		case KeyEvent.VK_LEFT:
-		case KeyEvent.VK_J:
 			model.stop();
 			view.setAnimation(Animation.IDLE);
+			break;
+		case KeyEvent.VK_J:
+			System.out.println("Key was released");
+			view.setAnimation(Animation.JUMP);
+			System.out.println("Animation set to Jump");
 			break;
 		case KeyEvent.VK_F:
 			System.out.println("Key was released");
