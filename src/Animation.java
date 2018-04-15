@@ -38,6 +38,14 @@ public abstract class Animation {
 	protected boolean getFireEnd() {
 		return this.fireEnd;
 	}
+	
+	protected void setJumpEnd(boolean b) {
+		this.jumpEnd = b;
+	}
+	
+	protected boolean getJumpEnd() {
+		return this.jumpEnd;
+	}
 
 	//---------- Convenience methods for inside subclasses:
 
@@ -171,15 +179,15 @@ public abstract class Animation {
 		
 		@Override
 		protected BufferedImage sequentialFrames(BufferedImage[] imgs) {
-			System.out.println(this.frameNum);
+			//System.out.println(this.frameNum);
 			if(this.frameNum< 8) {
-			System.out.println(this.frameNum);
+			//System.out.println(this.frameNum);
 			return imgs[this.getFrameNum() % imgs.length];
 			}
 			else {
-				System.out.println("Jump Animation Looped");
+				//System.out.println("Jump Animation Looped");
 				this.setFireEnd(true); 
-				System.out.println("setting jumpEnd to true");
+				//System.out.println("setting jumpEnd to true");
 				this.frameNum = 0;
 				return imgs[this.getFrameNum() % imgs.length];
 			}
@@ -206,16 +214,16 @@ public abstract class Animation {
 		}
 		@Override
 		protected BufferedImage sequentialFrames(BufferedImage[] imgs) {
-			System.out.println("We are in the Overriden sequential frames");
-			if(this.getFrameNum()< 4) {
-				System.out.println(this.getFrameNum() %imgs.length);
+			//System.out.println("We are in the Overriden sequential frames");
+			if(this.frameNum< 4) {
+				//System.out.println(this.frameNum %imgs.length);
 			return imgs[this.getFrameNum() % imgs.length];
 			}
 			else {
-				System.out.println("Fire Animation Looped");
+				//System.out.println("Fire Animation Looped");
 				fireEnd = true;
 				this.frameNum = 0;
-				return imgs[this.getFrameNum() % imgs.length];
+				return imgs[this.frameNum % imgs.length];
 			}
 			}
 		}
