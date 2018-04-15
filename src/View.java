@@ -18,35 +18,12 @@ public class View extends JPanel{
     private static int yLoc = 0;
     private static Direction curDir = Direction.EAST;
 	private static final Color BACKGROUND_COLOR = Color.GRAY;
-	static boolean startW;
     static int bCount;
     Animation animation = Animation.IDLE;
     public View() {
     	// Preload animations
 		Animation.preload();
     	
-    	JButton b = new JButton("stop/start");
-    	b.addActionListener( new ActionListener()
-    	{
-    	    @Override
-    	    public void actionPerformed(ActionEvent e)
-    	    {
-    	    	if(bCount % 2 == 0)
-    	    	{
-    	    		startW = true;
-    	    		bCount++;
-    	    	}
-    	    	else
-    	    	{
-    	    		startW = false;
-    	    		bCount++;
-    	    	}
-    	    }
-    	});
-    	
-    	b.setBounds(100,0,90,30);
-    	b.setFocusable(false);
-    	frame.add(b);
     	frame.setFocusable(true);
     	frame.getContentPane().add(this);
     	frame.getContentPane().setBackground(BACKGROUND_COLOR);

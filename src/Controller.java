@@ -22,10 +22,8 @@ public class Controller implements KeyListener {
 
 	private void step() {
 		// increment the x and y coordinates, alter direction if necessary
-		if (view.startW == true) {
-			model.updateModel();
-			view.update(model.getX(), model.getY(), model.getDirect());
-		}
+		model.updateModel();
+		view.update(model.getX(), model.getY(), model.getDirect());
 	}
 
 	// run the simulation
